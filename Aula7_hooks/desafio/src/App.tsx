@@ -1,62 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import OwnerSelect from "./Components/ownerSelect";
+import AnimalSelect from "./Components/animalSelect";
+import FilteredList from "./Components/filteredList";
+// import IOwners from "./apifake/Interfaces/IOwner";
+// import IAnimal from "./apifake/Interfaces/IAnimal";
 
-// import Animals from './apifake/Animals';
-// import Owners from './apifake/Owners';
+import Owners from './apifake/Owners';
+import Animals from './apifake/Animals';
 
 import "./style.css";
+import IOwner from './apifake/Interfaces/IOwner';
 
 // chamadas de api fake
-// const owners: Owners = new Owners();
-// const animals: Animals = new Animals();
+const owners: Owners = new Owners();
+const animals: Animals = new Animals();
 
 // owners.getAll(); // retorna promise
 // animals.getByOwnerId(); // retorna promise
 
+
 function App() {
+
+
+  const [ownerState, setOwnerState] = useState<IOwner[]>([]);
+
+
+  const getData = async () => {
+    let data = await owners.getAll();
+    console.log(data);
+    setOwnerState(data)
+  }
+
+  useEffect(() => {
+    getData()
+
+  }, []);
+
+
   return (
     <div className="App">
-      <section id="owners-section">
-        <label htmlFor="owners">Donos:</label>
-        <select id="owners">
-          <option value="1">Dono 1</option>
-          <option value="2">Dono 2</option>
-          <option value="3">Dono 3</option>
-          <option value="4">Dono 4</option>
-        </select>
-      </section>
-      <section id="animals-section">
-        <label htmlFor="animals">Animais:</label>
-        <select id="animals">
-          <option>Animal 1</option>
-          <option>Animal 2</option>
-          <option>Animal 3</option>
-          <option>Animal 4</option>
-        </select>
-      </section>
+
+      <OwnerSelect id={1} name="Dono=>1" email="teste@teste.com" />
+
+      <AnimalSelect id={1} name="Animal=>1" type="cat" ownerId={1} />
+
+
       <section id="report">
         <button>Ordenar donos com mais animais</button>
-        <table id="reportList">
-          <thead>
-            <tr>
-              <th>Dono</th>
-              <th>Quantidade</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Fulano 1</td>
-              <td>2 animais</td>
-            </tr>
-            <tr>
-              <td>Fulano 2</td>
-              <td>1 animal</td>
-            </tr>
-            <tr>
-              <td>Fulano 3</td>
-              <td>3 animais</td>
-            </tr>
-          </tbody>
-        </table>
+
+        <FilteredList id={1} ownerName="fulano=>1" animalName="cat" ownerId={1} />
+
       </section>
     </div>
   );
